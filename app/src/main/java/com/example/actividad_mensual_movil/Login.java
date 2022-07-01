@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import java.util.TimerTask;
 
 public class Login extends AppCompatActivity {
     private TextView txt_registro, txt_email, txt_password;
+    private ProgressBar prg_bar_log;
     private Button btn_registrar, btn_login;
 
     @Override
@@ -38,6 +40,7 @@ public class Login extends AppCompatActivity {
         txt_password = findViewById(R.id.txt_password);
         txt_email = findViewById(R.id.txt_email);
         btn_login = findViewById(R.id.btn_login);
+        prg_bar_log = findViewById(R.id.prg_bar_log);
     }
 
     public void ValData(View view) {
@@ -51,6 +54,7 @@ public class Login extends AppCompatActivity {
             } else {
                 ConsultaBD_(Password, Email);
                 btn_login.setEnabled(false);
+                prg_bar_log.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -61,6 +65,7 @@ public class Login extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        prg_bar_log.setVisibility(View.INVISIBLE);
                         btn_login.setEnabled(true);
                         String usser_find = "";
                         String estado_find = "";
@@ -113,9 +118,14 @@ public class Login extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-
     public void Registro(View view) {
         Intent In = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(In);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //En caso de querer permitir volver atrás usa esta llamada:
+        super.onBackPressed();
     }
 }

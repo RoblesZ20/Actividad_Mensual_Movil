@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Actividad_Mensual_Movil" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/color_claro</item>
         <item name="colorPrimaryVariant">@color/color_claro</item>
