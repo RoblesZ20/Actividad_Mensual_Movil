@@ -16,9 +16,6 @@
         android:theme="@style/Theme.Actividad_Mensual_Movil"
         tools:targetApi="31">
         <activity
-            android:name=".Close"
-            android:exported="false" />
-        <activity
             android:name=".LogedCP"
             android:exported="false" />
         <activity

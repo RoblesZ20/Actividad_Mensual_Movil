@@ -2,9 +2,11 @@ package com.example.actividad_mensual_movil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Application;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -62,8 +64,7 @@ public class Login extends AppCompatActivity {
 
 
     //Revisar esta parte----
-    public void ConsultaBD_(String Password, String Email) {//REVISAR ESTO
-//        Toast.makeText(Login.this, "LLEGUE AQUI", Toast.LENGTH_SHORT).show();
+    public void ConsultaBD_(String Password, String Email) {
         String url = "https://actividadm.proyectoarp.com/Metodos/Acceso.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -80,7 +81,6 @@ public class Login extends AppCompatActivity {
                         String email_find = "";
                         if (!response.equals("null")) {
                             if (response.equals("No")) {
-                                //presentador.Error_Password_Incorrect("La contraseña es incorrecta");
                                 Toast.makeText(Login.this, "El correo electronico no existe", Toast.LENGTH_SHORT).show();
                             } else if (response.equals("Nan")) {
                                 Toast.makeText(Login.this, "La contraseña no es correcta", Toast.LENGTH_SHORT).show();
@@ -110,7 +110,6 @@ public class Login extends AppCompatActivity {
                                     }
                                 } catch (Exception e) {
                                     //error en la extraccion de los datos del Json
-                                    //presentador.Error_array("Error en la extraccion de los datos del Json");
                                 }
                             }
                         }
@@ -118,8 +117,7 @@ public class Login extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Login.this, "Error de volley", Toast.LENGTH_SHORT).show();
-
+                ErrorConexion();
             }
         }) {
             @Nullable
@@ -145,5 +143,44 @@ public class Login extends AppCompatActivity {
         txt_password.setEnabled(false);
         txt_email.setEnabled(false);
         prg_bar_log.setVisibility(View.VISIBLE);
+    }
+
+    public void ErrorConexion() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+        builder.setTitle("Error de conexión");
+        builder.setMessage("¿No se a podido iniciar sesión, ¿Desea intentar de nuevo?")
+                .setCancelable(false)
+                .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {//Intentar login de nuevo
+                        Reconexion();
+                    }
+                })
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        prg_bar_log.setVisibility(View.INVISIBLE);
+                        btn_login.setEnabled(true);
+                        txt_password.setEnabled(true);
+                        txt_email.setEnabled(true);
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
+    }
+
+    public void Reconexion() {
+        String Password = txt_password.getText().toString();
+        String Email = txt_email.getText().toString();
+        if (Email.length() == 0) {
+            txt_email.setError("Ingresa una email");
+        } else {
+            if (Password.length() == 0) {
+                txt_password.setError("Ingresa una contraseña");
+            } else {
+                ConsultaBD_(Password, Email);
+                Configuracion();
+            }
+        }
     }
 }

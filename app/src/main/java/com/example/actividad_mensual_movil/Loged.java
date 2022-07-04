@@ -56,7 +56,6 @@ public class Loged extends AppCompatActivity {
         if (id == R.id.grafica) {
             Toast.makeText(this, "Graficas", Toast.LENGTH_LONG).show();
         } else if (id == R.id.sesion) {
-//            Toast.makeText(this, "Sesion", Toast.LENGTH_LONG).show();
             AlertDialog.Builder builder = new AlertDialog.Builder(Loged.this);
             builder.setTitle("Cerrar Sesión");
             builder.setMessage("¿Estás seguro que quieres cerrar tu sesión?")
