@@ -1,8 +1,10 @@
 package com.example.actividad_mensual_movil;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,20 +48,22 @@ public class Login extends AppCompatActivity {
     public void ValData(View view) {
         String Password = txt_password.getText().toString();
         String Email = txt_email.getText().toString();
-        if (Password.length() == 0) {
+        if (Email.length() == 0) {
             txt_password.setError("Ingresa una contraseña");
         } else {
-            if (Email.length() == 0) {
+            if (Password.length() == 0) {
                 txt_email.setError("Ingresa una email");
             } else {
                 ConsultaBD_(Password, Email);
-                btn_login.setEnabled(false);
-                prg_bar_log.setVisibility(View.VISIBLE);
+                Configuracion();
             }
         }
     }
 
+
+    //Revisar esta parte----
     public void ConsultaBD_(String Password, String Email) {//REVISAR ESTO
+//        Toast.makeText(Login.this, "LLEGUE AQUI", Toast.LENGTH_SHORT).show();
         String url = "https://actividadm.proyectoarp.com/Metodos/Acceso.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -67,12 +71,19 @@ public class Login extends AppCompatActivity {
                     public void onResponse(String response) {
                         prg_bar_log.setVisibility(View.INVISIBLE);
                         btn_login.setEnabled(true);
+                        txt_email.setText("");
+                        txt_password.setText("");
+                        txt_password.setEnabled(true);
+                        txt_email.setEnabled(true);
                         String usser_find = "";
                         String estado_find = "";
+                        String email_find = "";
                         if (!response.equals("null")) {
-                            if (response.equals("Nan")) {
+                            if (response.equals("No")) {
                                 //presentador.Error_Password_Incorrect("La contraseña es incorrecta");
                                 Toast.makeText(Login.this, "El correo electronico no existe", Toast.LENGTH_SHORT).show();
+                            } else if (response.equals("Nan")) {
+                                Toast.makeText(Login.this, "La contraseña no es correcta", Toast.LENGTH_SHORT).show();
                             } else {
                                 try {
                                     JSONArray data = new JSONArray(response);
@@ -80,29 +91,35 @@ public class Login extends AppCompatActivity {
                                         JSONObject values = data.getJSONObject(x);
                                         usser_find = values.getString("Name_usser");
                                         estado_find = values.getString("Estado");
+                                        email_find = values.getString("Email");
                                     }
                                     String Name_Usser = usser_find;
                                     String Estado_usser = estado_find;
-                                    //ENVIO A LA VISTA LOGED
-                                    Toast.makeText(Login.this, "CORRECTO-LOGED", Toast.LENGTH_SHORT).show();
-                                    Intent In_ = new Intent(getApplicationContext(), Loged.class);
-                                    In_.putExtra("usser", Name_Usser);
-                                    In_.putExtra("Estado", Estado_usser);
-                                    startActivity(In_);
+                                    String Email_usser = email_find;
+                                    int Status = Integer.parseInt(Estado_usser);
+
+                                    if (Status == 1) {//ENVIO A LA VISTA LOGED [CON PROCESO]
+                                        Intent In_C = new Intent(getApplicationContext(), LogedCP.class);
+                                        In_C.putExtra("usser", Name_Usser);
+                                        In_C.putExtra("email", Email_usser);
+                                        startActivity(In_C);
+                                    } else { //ENVIO A LA VISTA LOGED [SIN PROCESO]
+                                        Intent In_ = new Intent(getApplicationContext(), Loged.class);
+                                        In_.putExtra("usser", Name_Usser);
+                                        startActivity(In_);
+                                    }
                                 } catch (Exception e) {
                                     //error en la extraccion de los datos del Json
                                     //presentador.Error_array("Error en la extraccion de los datos del Json");
                                 }
                             }
-                        } else {
-                            //error no se encontro el usuario
-                            //presentador.Error_usser("El usuario es incorrecto o no existe");
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //presentador.Error_volley("Ocurrio un problema con la lirberia Volley");
+                Toast.makeText(Login.this, "Error de volley", Toast.LENGTH_SHORT).show();
+
             }
         }) {
             @Nullable
@@ -123,9 +140,10 @@ public class Login extends AppCompatActivity {
         startActivity(In);
     }
 
-    @Override
-    public void onBackPressed() {
-        //En caso de querer permitir volver atrás usa esta llamada:
-        super.onBackPressed();
+    public void Configuracion() {
+        btn_login.setEnabled(false);
+        txt_password.setEnabled(false);
+        txt_email.setEnabled(false);
+        prg_bar_log.setVisibility(View.VISIBLE);
     }
 }

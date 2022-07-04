@@ -32,9 +32,10 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="275dp">
+            android:layout_height="wrap_content">
 
             <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerInside"
@@ -48,7 +49,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/txt_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Vaya!"
@@ -56,21 +57,19 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/txt_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Parece ser que aún  no configuras tu meta semanal"
             android:textAlignment="center"
             android:textSize="17sp" />
 
-        <Button
-            android:id="@+id/button"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10sp"
-            android:layout_marginRight="20dp"
-            android:text="Configurar" />
+            android:text="Inicia sesión en Wear para hacer la configuración"
+            android:textAlignment="center"
+            android:textSize="17sp" />
 
     </LinearLayout>
 </FrameLayout>

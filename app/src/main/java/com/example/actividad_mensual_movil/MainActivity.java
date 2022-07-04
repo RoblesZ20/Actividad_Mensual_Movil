@@ -2,8 +2,14 @@ package com.example.actividad_mensual_movil;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,12 +34,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView txt_usser, txt_password, txt_email, txt_registro;
     private Button btn_registrar;
     private ProgressBar prb_register;
+    private String CHANNEL_ID = "MiApp";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         txt_usser = findViewById(R.id.txt_usser);
         txt_password = findViewById(R.id.txt_password);
         txt_email = findViewById(R.id.txt_email);
@@ -41,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         btn_registrar = findViewById(R.id.btn_login);
         prb_register = findViewById(R.id.prb_register);
 
+        //CREAR CANAL Y DEFINIR IMPORTANCIA
+        createNotificationChannel();
     }
 
     public void ValData(View view) {
@@ -78,18 +87,10 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Registro incorrecto!", Toast.LENGTH_LONG).show();
                             } else {
                                 try {
-                                    Toast.makeText(MainActivity.this, "Registrado correctamente", Toast.LENGTH_SHORT).show();
-                                    //Manda al login
-//                                    TimerTask logo = new TimerTask() {
-//                                        @Override
-//                                        public void run() {
+                                    NotificacionRegistro();
                                     Intent In = new Intent(getApplicationContext(), Login.class);
                                     startActivity(In);
                                     finish();
-//                                        }
-//                                    };
-//                                    Timer tiempo = new Timer();
-//                                    tiempo.schedule(logo, 2500);
 
                                 } catch (Exception e) {
                                     Toast.makeText(MainActivity.this, "Error tryCatch", Toast.LENGTH_SHORT).show();
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else {
                             //error no se encontro el usuario
-                            //presentador.Error_usser("El usuario es incorrecto o no existe");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -125,6 +125,33 @@ public class MainActivity extends AppCompatActivity {
         startActivity(In);
     }
 
+
+    //NOTIFICACION
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void NotificacionRegistro() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_name)
+                .setContentTitle("REGISTRO")
+                .setContentText("Genial!: Se ha registrado correctamente en Kcal2022")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText("Es la hora de registrar tu primer recorrido en la App para dispositivos Wearable " +
+                        "para comenzar a visualizar tu progreso y status de tu meta indicada, ¡empecemos!"))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, builder.build());
+    }
 
 }
 

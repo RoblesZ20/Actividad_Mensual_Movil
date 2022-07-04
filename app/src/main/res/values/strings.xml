@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">Calorias</string>
+    <string name="channel_name">Notification</string>
+    <string name="channel_description">Primera notificacion</string>
+
 
 </resources>
