@@ -32,7 +32,7 @@ import java.util.TimerTask;
 public class Login extends AppCompatActivity {
     private TextView txt_registro, txt_email, txt_password;
     private ProgressBar prg_bar_log;
-    private Button btn_registrar, btn_login;
+    private Button btn_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
