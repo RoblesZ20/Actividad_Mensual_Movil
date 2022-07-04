@@ -49,10 +49,10 @@ public class Login extends AppCompatActivity {
         String Password = txt_password.getText().toString();
         String Email = txt_email.getText().toString();
         if (Email.length() == 0) {
-            txt_password.setError("Ingresa una contraseña");
+            txt_email.setError("Ingresa una email");
         } else {
             if (Password.length() == 0) {
-                txt_email.setError("Ingresa una email");
+                txt_password.setError("Ingresa una contraseña");
             } else {
                 ConsultaBD_(Password, Email);
                 Configuracion();

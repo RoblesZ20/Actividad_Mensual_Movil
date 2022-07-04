@@ -9,11 +9,12 @@
     tools:context=".Loged">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/view_open"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/textView6"
@@ -70,6 +71,45 @@
             android:text="Inicia sesión en Wear para hacer la configuración"
             android:textAlignment="center"
             android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/view_close"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/close"
+                app:lottie_speed="0.7">
+
+            </com.airbnb.lottie.LottieAnimationView>
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40sp"
+                android:fontFamily="sans-serif-medium"
+                android:text="CERRANDO SESION"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
 
     </LinearLayout>
 </FrameLayout>

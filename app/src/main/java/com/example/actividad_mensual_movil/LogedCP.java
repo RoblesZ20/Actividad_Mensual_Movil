@@ -7,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,8 @@ import java.util.Map;
 public class LogedCP extends AppCompatActivity {
     Bundle bundle;
     private TextView txt_usser_name_, txt_Meta, txt_Recorrido, txt_D1, txt_D2, txt_D3, txt_D4, txt_D5;
+    private LinearLayout view_open, view_close;
+    private final int DURACION_SPLASH = 2500; // 2.5 segundos
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +44,8 @@ public class LogedCP extends AppCompatActivity {
         bundle = getIntent().getExtras();
         String name_ = bundle.getString("usser");
         String email_ = bundle.getString("email");
-//        Toast.makeText(this, "Este es tu usuario"+ name_, Toast.LENGTH_SHORT).show();
         txt_usser_name_ = (TextView) findViewById(R.id.txt_usser_name_);
         txt_usser_name_.setText(name_);
-//        Toast.makeText(this, "" + email_, Toast.LENGTH_SHORT).show();
         Consulta(email_);
     }
 
@@ -53,13 +55,11 @@ public class LogedCP extends AppCompatActivity {
         return true;
     }
 
-    //
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.grafica) {
             Toast.makeText(this, "Graficas", Toast.LENGTH_LONG).show();
         } else if (id == R.id.sesion) {
-//            Toast.makeText(this, "Sesion", Toast.LENGTH_LONG).show();
             AlertDialog.Builder builder = new AlertDialog.Builder(LogedCP.this);
             builder.setTitle("Cerrar Sesión");
             builder.setMessage("¿Estás seguro que quieres cerrar tu sesión?")
@@ -67,7 +67,7 @@ public class LogedCP extends AppCompatActivity {
                     .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
+                            CerrarSesion();
                         }
                     })
                     .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
@@ -157,6 +157,23 @@ public class LogedCP extends AppCompatActivity {
         };
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         queue.add(stringRequest);
+    }
+
+    public void CerrarSesion() {
+        //vista normal
+        view_open = (LinearLayout) findViewById(R.id.view_open);
+        view_open.setVisibility(View.GONE);
+        //vista de cierre de sesion
+        view_close = (LinearLayout) findViewById(R.id.view_close);
+        view_close.setVisibility(View.VISIBLE);
+
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                Intent In = new Intent(getApplicationContext(), Login.class);
+                startActivity(In);
+                finish();
+            }
+        }, DURACION_SPLASH);
     }
 
 
